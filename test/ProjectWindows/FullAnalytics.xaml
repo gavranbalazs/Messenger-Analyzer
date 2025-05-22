@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="test.FullAnalytics"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:test"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    mc:Ignorable="d"
+    xmlns:helpers="using:test.ProjectWindows" d:DataContext="{d:DesignInstance Type=helpers:SummaryViewModel}"
+    xmlns:charts="using:test.Components"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls">
+
+    <ScrollViewer  VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Disabled" MaxWidth="2500">
+        <controls:WrapPanel Margin="15">
+            <charts:NumberOfMessagesGraph x:Name="NumberOfMessagesGraph" Margin="10" />
+            <charts:DailyMessageCount x:Name="DailyMessageCount" Margin="10" />
+            <charts:TimeOfDayStats x:Name="TimeOfDaysStats" Margin="10"/>
+            <charts:DailyMessageCount  Margin="10" />
+            <charts:DailyMessageCount  Margin="10" />
+            <charts:DailyMessageCount  Margin="10" />
+            <!-- további grafikonok -->
+        </controls:WrapPanel>
+    </ScrollViewer>
+</Page>

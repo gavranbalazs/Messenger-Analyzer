@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window  
+    x:Class="test.ImportFromZipWindow"  
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"  
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"  
+    xmlns:vm="using:test.ImportFromZip"
+    mc:Ignorable="d"  
+    Title="ImportFromZip"  
+>  
+
+    <Window.SystemBackdrop>  
+        <MicaBackdrop />  
+    </Window.SystemBackdrop>  
+
+    <Grid Padding="20" RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*">  
+        <!-- ZIP fájl hozzáadás -->  
+        <StackPanel Orientation="Horizontal" Spacing="10">  
+            <Button Content="ZIP fájlok hozzáadása"  Click="AddZipFiles_Click" />
+            <Button Content="Elemzés indítása" Click="AnalyzeZips_Click" />
+            <ProgressRing x:Name="AnalyzerSpinner"
+                  Width="20" Height="20"
+                  VerticalAlignment="Center" />
+        </StackPanel>  
+
+        <!-- ZIP fájlok listája -->
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <TextBlock Text="Betöltött ZIP fájlok:" Margin="0,20,0,5" FontWeight="Bold"/>
+            <ListView   
+          ItemsSource="{x:Bind ViewModel.zipFiles, Mode=OneWay}"  
+          Margin="0,0,0,20"  
+          MaxHeight="100">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <TextBlock Text="{x:Bind}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>  
+
+        <!-- Beszélgetések kiválasztása -->
+        <StackPanel Orientation="Vertical" Grid.Row="2">
+            
+            <AutoSuggestBox
+                    Width="300"
+                    PlaceholderText="Beszélgetés keresése..."
+                    ItemsSource="{x:Bind ViewModel.filteredCandidates, Mode=OneWay}"
+                    TextChanged="AutoSuggestBox_TextChanged"
+                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                    QuerySubmitted="AutoSuggestBox_QuerySubmitted">
+                <AutoSuggestBox.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ConversationCandidate">
+                        <TextBlock Text="{x:Bind DisplayName}" />
+                    </DataTemplate>
+                </AutoSuggestBox.ItemTemplate>
+            </AutoSuggestBox>
+
+            <ListView ItemsSource="{x:Bind ViewModel.conversationCandidates, Mode=OneWay}" MaxHeight="500" SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:ConversationCandidate">
+                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+
+
+        <Button Content="Importálás" Grid.Row="3" HorizontalAlignment="Right" Click="ImportSelected_Click" />  
+    </Grid>  
+</Window>

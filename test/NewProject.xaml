@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="test.NewProjectWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:test"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="New Project">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid Padding="20">
+        <StackPanel Spacing="15">
+            <TextBlock Text="Új beszélgetés elemzés" FontSize="24" FontWeight="Bold" />
+
+            <TextBlock Text="Elemzés neve:" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBox x:Name="ProjectNameTextBox" PlaceholderText="Projekt neve" Width="300" />
+                <CheckBox x:Name="IsAutomaticName" Checked="AutomaticNameChanged" Unchecked="AutomaticNameChanged" Content="Automatikus elnevezés" IsChecked="True"  />
+            </StackPanel>
+
+            <TextBlock Text="Elemzés leírása (nem kötelező):" />
+            <TextBox x:Name="ProjectDescriptionTextBox"  PlaceholderText="" />
+            
+            <ComboBox x:Name="LanguageSelector"
+                        Header="Beszélgetés nyelve (LLM elemzéshez)"
+                        Width="200"
+                        SelectedValuePath="Tag"
+                        DisplayMemberPath="Content"
+                        SelectedIndex="0">
+                <ComboBoxItem Content="Magyar" Tag="hu-HU" />
+                <ComboBoxItem Content="English" Tag="en-US" />
+                <ComboBoxItem Content="Deutsch" Tag="de-DE" />
+                <ComboBoxItem Content="Français" Tag="fr-FR" />
+                <ComboBoxItem Content="Español" Tag="es-ES" />
+                <ComboBoxItem Content="Italiano" Tag="it-IT" />
+                <ComboBoxItem Content="Português" Tag="pt-PT" />
+                <ComboBoxItem Content="Nederlands" Tag="nl-NL" />
+                <ComboBoxItem Content="Svenska" Tag="sv-SE" />
+                <ComboBoxItem Content="Dansk" Tag="da-DK" />
+                <ComboBoxItem Content="Suomi" Tag="fi-FI" />
+            </ComboBox>
+
+            <TextBlock Text="Beszélgetés fájlok (Facebooktól lekért adatokból):" />
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="Fájlok kiválasztása" Click="SelectFiles" />
+                <Button x:Name="RemoveFile" Click="RemoveSelectedFiles" IsEnabled="False">
+                    <FontIcon Glyph="&#xE74D;" />
+                </Button>
+                <ProgressBar x:Name="LoadingBar" Visibility="Collapsed" Width="130" Value="50" />
+            </StackPanel>
+            
+            <ListView x:Name="FileListView" SelectionMode="Extended"  Height="160" />
+
+            <Grid VerticalAlignment="Center" Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+
+                <TextBlock Grid.Column="0" x:Name="FileInfoTB" VerticalAlignment="Center" Margin="0,0,10,0" />
+
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+                    <Button Content="Mégsem" Click="Cancle" />
+                    <Button Content="Létrehozás" Click="CreateProject" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
