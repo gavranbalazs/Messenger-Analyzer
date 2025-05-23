@@ -84,7 +84,7 @@ namespace test.ImportFromZip
                     }
                     catch (Exception ex)
                     {
-                        // Hibaüzenetet később UI threaden jelenítjük meg
+                        
                         Window.Current.DispatcherQueue.TryEnqueue(async () =>
                         {
                             ContentDialog dialog = new()
@@ -100,17 +100,33 @@ namespace test.ImportFromZip
                 }
             });
 
-            // UI frissítés dispatcherrel (ha szükséges)
+            
             foreach (var c in candidates)
             {
                 conversationCandidates.Add(c);
             }
 
-            
+            filteredCandidates.Clear();
+            foreach (var candidate in conversationCandidates)
+            {
+                filteredCandidates.Add(candidate);
+            }
+
         }
 
         public void UpdateFilteredCandidates(string query)
         {
+            
+            if (string.IsNullOrEmpty(query))
+            {
+                filteredCandidates.Clear();
+                foreach (var candidate in conversationCandidates)
+                {
+                    filteredCandidates.Add(candidate);
+                }
+                return;
+            }
+
             filteredCandidates.Clear();
 
             foreach (var candidate in conversationCandidates
@@ -145,6 +161,26 @@ namespace test.ImportFromZip
             catch
             {
                 return input;
+            }
+        }
+
+        internal void UpdateSelectedCandidate(ConversationCandidate candidate)
+        {
+
+            foreach (var candidate1 in filteredCandidates)
+            {
+                if (candidate1.DisplayName == candidate.DisplayName)
+                {
+                    candidate1.IsSelected = candidate.IsSelected;
+                }
+            }
+
+            foreach (var candidate1 in conversationCandidates)
+            {
+                if (candidate1.DisplayName == candidate.DisplayName)
+                {
+                    candidate1.IsSelected = candidate.IsSelected;
+                }
             }
         }
     }

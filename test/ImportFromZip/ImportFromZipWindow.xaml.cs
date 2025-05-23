@@ -97,9 +97,9 @@ public sealed partial class ImportFromZipWindow : Window
     {
         if (args.SelectedItem is ConversationCandidate candidate)
         {
-            // Kiválasztott beszélgetés
-            Debug.WriteLine($"Kiválasztva: {candidate.DisplayName}");
-            sender.Text = candidate.DisplayName;
+            candidate.IsSelected = true;
+            //notify the view model about the change
+            ViewModel.UpdateSelectedCandidate(candidate);
 
         }
     }
