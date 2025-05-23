@@ -84,7 +84,7 @@ namespace test.ImportFromZip
                     }
                     catch (Exception ex)
                     {
-                        
+
                         Window.Current.DispatcherQueue.TryEnqueue(async () =>
                         {
                             ContentDialog dialog = new()
@@ -96,6 +96,14 @@ namespace test.ImportFromZip
                             };
                             await dialog.ShowAsync();
                         });
+                    }
+                    finally
+                    {
+                        // Clean up the temporary folder
+                        if (Directory.Exists(tempFolder))
+                        {
+                            Directory.Delete(tempFolder, true);
+                        }
                     }
                 }
             });
@@ -167,19 +175,19 @@ namespace test.ImportFromZip
         internal void UpdateSelectedCandidate(ConversationCandidate candidate)
         {
 
-            foreach (var candidate1 in filteredCandidates)
+            var index = filteredCandidates.IndexOf(candidate);
+            if (index != -1)
             {
-                if (candidate1.DisplayName == candidate.DisplayName)
-                {
-                    candidate1.IsSelected = candidate.IsSelected;
-                }
+                // Trigger UI refresh
+                filteredCandidates.RemoveAt(index);
+                filteredCandidates.Insert(index, candidate);
             }
 
-            foreach (var candidate1 in conversationCandidates)
+            foreach (var c in conversationCandidates)
             {
-                if (candidate1.DisplayName == candidate.DisplayName)
+                if (c.DisplayName == candidate.DisplayName)
                 {
-                    candidate1.IsSelected = candidate.IsSelected;
+                    c.IsSelected = candidate.IsSelected;
                 }
             }
         }

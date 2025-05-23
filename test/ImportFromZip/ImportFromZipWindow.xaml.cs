@@ -1,3 +1,4 @@
+using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -15,6 +16,7 @@ using System.Threading.Tasks;
 using test.HelperClasses;
 using test.Helpers;
 using test.ImportFromZip;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -123,6 +125,21 @@ public sealed partial class ImportFromZipWindow : Window
         ring.IsActive = true;
     }
 
+    private void Grid_DragOver(object sender, DragEventArgs e)
+    {
+        e.AcceptedOperation = DataPackageOperation.Link;
 
+        e.DragUIOverride.Caption = "ZIP fájl(ok) hozzáadása";
+        MainGrid.Background = new SolidColorBrush(Colors.LightGray);
+    }
 
+    private void Grid_Drop(object sender, DragEventArgs e)
+    {
+        MainGrid.Background = new SolidColorBrush(Colors.Transparent);
+    }
+
+    private void Grid_DragLeave(object sender, DragEventArgs e)
+    {
+        MainGrid.Background = new SolidColorBrush(Colors.Transparent);
+    }
 }

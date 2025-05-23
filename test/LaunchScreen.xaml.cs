@@ -38,6 +38,7 @@ namespace test
             AppWindow.TitleBar.ExtendsContentIntoTitleBar = true;
             AppWindow.Resize(new Windows.Graphics.SizeInt32(800, 600));
             LoadRecentProjects();
+            CleanOldTempFolders();
         }
 
         private void LoadRecentProjects()
@@ -111,6 +112,22 @@ namespace test
             var appWindow = WindowHelper.GetAppWindow(newProjectWindow);
             appWindow.Move(new Windows.Graphics.PointInt32(x + 50, y + 50));
             newProjectWindow.Activate();
+        }
+
+        void CleanOldTempFolders()
+        {
+            string baseTemp = Path.Combine(Path.GetTempPath(), "MessengerImport");
+            if (Directory.Exists(baseTemp))
+            {
+                foreach (var dir in Directory.GetDirectories(baseTemp))
+                {
+                    try
+                    {
+                        Directory.Delete(dir, true);
+                    }
+                    catch { }
+                }
+            }
         }
     }
 }

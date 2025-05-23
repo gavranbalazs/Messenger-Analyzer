@@ -12,9 +12,9 @@
 
     <Window.SystemBackdrop>  
         <MicaBackdrop />  
-    </Window.SystemBackdrop>  
+    </Window.SystemBackdrop>
 
-    <Grid Padding="20" RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*">  
+    <Grid Padding="20" RowDefinitions="Auto,Auto,*,Auto" ColumnDefinitions="*"  Background="Transparent" AllowDrop="True" DragOver="Grid_DragOver" Drop="Grid_Drop" DragLeave="Grid_DragLeave" x:Name="MainGrid">  
         <!-- ZIP fájl hozzáadás -->  
         <StackPanel Orientation="Horizontal" Spacing="10">  
             <Button Content="ZIP fájlok hozzáadása"  Click="AddZipFiles_Click" />
