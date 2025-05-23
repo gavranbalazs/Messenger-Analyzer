@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"  
     xmlns:vm="using:test.ImportFromZip"
     mc:Ignorable="d"  
-    Title="ImportFromZip"  
->  
+    Title="ImportFromZip"
+    Closed="WindowClosed">
 
     <Window.SystemBackdrop>  
         <MicaBackdrop />  
@@ -27,10 +27,7 @@
         <!-- ZIP fájlok listája -->
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <TextBlock Text="Betöltött ZIP fájlok:" Margin="0,20,0,5" FontWeight="Bold"/>
-            <ListView   
-          ItemsSource="{x:Bind ViewModel.zipFiles, Mode=OneWay}"  
-          Margin="0,0,0,20"  
-          MaxHeight="100">
+            <ListView ItemsSource="{x:Bind ViewModel.zipFiles, Mode=OneWay}" Margin="0,0,0,20" MaxHeight="100" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="x:String">
                         <TextBlock Text="{x:Bind}" />
@@ -40,15 +37,14 @@
         </StackPanel>  
 
         <!-- Beszélgetések kiválasztása -->
-        <StackPanel Orientation="Vertical" Grid.Row="2">
+        <StackPanel Orientation="Vertical" Grid.Row="2" HorizontalAlignment="Left">
             
             <AutoSuggestBox
                     Width="300"
                     PlaceholderText="Beszélgetés keresése..."
                     ItemsSource="{x:Bind ViewModel.filteredCandidates, Mode=OneWay}"
                     TextChanged="AutoSuggestBox_TextChanged"
-                    SuggestionChosen="AutoSuggestBox_SuggestionChosen"
-                    QuerySubmitted="AutoSuggestBox_QuerySubmitted">
+                    SuggestionChosen="AutoSuggestBox_SuggestionChosen">
                 <AutoSuggestBox.ItemTemplate>
                     <DataTemplate x:DataType="vm:ConversationCandidate">
                         <TextBlock Text="{x:Bind DisplayName}" />
@@ -59,7 +55,10 @@
             <ListView ItemsSource="{x:Bind ViewModel.filteredCandidates, Mode=OneWay}" MaxHeight="500" SelectionMode="None">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="vm:ConversationCandidate">
-                        <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                            <TextBlock Text="{Binding ParticipantString}" FontSize="16" Margin="10,0,0,0" Foreground="Gray" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" Width="300" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

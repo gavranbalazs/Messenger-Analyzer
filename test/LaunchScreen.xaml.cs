@@ -110,7 +110,6 @@ namespace test
             ImportFromZipWindow newProjectWindow = new ImportFromZipWindow();
             var (x, y) = WindowHelper.GetWindowPosition(this);
             var appWindow = WindowHelper.GetAppWindow(newProjectWindow);
-            appWindow.Move(new Windows.Graphics.PointInt32(x + 50, y + 50));
             newProjectWindow.Activate();
         }
 

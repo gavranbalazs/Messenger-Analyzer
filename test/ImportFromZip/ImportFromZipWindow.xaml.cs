@@ -102,18 +102,9 @@ public sealed partial class ImportFromZipWindow : Window
             candidate.IsSelected = true;
             //notify the view model about the change
             ViewModel.UpdateSelectedCandidate(candidate);
-
+            ViewModel.UpdateFilteredCandidates(sender.Text);
         }
     }
-
-    private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-    {
-        Debug.WriteLine($"Keresés beküldve: {args.QueryText}");
-    }
-
-
-
-
 
     private async Task ActivateSpinnerAsync(ProgressRing ring)
     {
@@ -130,16 +121,25 @@ public sealed partial class ImportFromZipWindow : Window
         e.AcceptedOperation = DataPackageOperation.Link;
 
         e.DragUIOverride.Caption = "ZIP fájl(ok) hozzáadása";
-        MainGrid.Background = new SolidColorBrush(Colors.LightGray);
+        var color = new SolidColorBrush(Colors.Gray);
+        color.Opacity = 0.5;
+        MainGrid.Background = color;
     }
 
     private void Grid_Drop(object sender, DragEventArgs e)
     {
         MainGrid.Background = new SolidColorBrush(Colors.Transparent);
+
+        ViewModel.AddZipfilesFromDrop(e);
     }
 
     private void Grid_DragLeave(object sender, DragEventArgs e)
     {
         MainGrid.Background = new SolidColorBrush(Colors.Transparent);
+    }
+
+    private void WindowClosed(object sender, WindowEventArgs args)
+    {
+        ViewModel.CleanTempFolders();
     }
 }

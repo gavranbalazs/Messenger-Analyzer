@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using test.HelperClasses;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
 
@@ -77,7 +78,8 @@ namespace test.ImportFromZip
                                 candidates.Add(new ConversationCandidate
                                 {
                                     DisplayName = json.title,
-                                    IsSelected = false
+                                    IsSelected = false,
+                                    Participant = json.participants.Select(p => p.name).ToList()
                                 });
                             }
                         }
@@ -96,14 +98,6 @@ namespace test.ImportFromZip
                             };
                             await dialog.ShowAsync();
                         });
-                    }
-                    finally
-                    {
-                        // Clean up the temporary folder
-                        if (Directory.Exists(tempFolder))
-                        {
-                            Directory.Delete(tempFolder, true);
-                        }
                     }
                 }
             });
@@ -178,7 +172,7 @@ namespace test.ImportFromZip
             var index = filteredCandidates.IndexOf(candidate);
             if (index != -1)
             {
-                // Trigger UI refresh
+                
                 filteredCandidates.RemoveAt(index);
                 filteredCandidates.Insert(index, candidate);
             }
@@ -191,14 +185,51 @@ namespace test.ImportFromZip
                 }
             }
         }
+
+        internal void AddZipfilesFromDrop(DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                e.DataView.GetStorageItemsAsync().AsTask().ContinueWith(task =>
+                {
+                    var items = task.Result;
+                    foreach (var item in items)
+                    {
+                        if (item is Windows.Storage.StorageFile file && file.FileType == ".zip")
+                        {
+                            this.zipFiles.Add(file.Path);
+                        }
+                    }
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+            }
+        }
+
+        internal void CleanTempFolders()
+        {
+            string baseTemp = Path.Combine(Path.GetTempPath(), "MessengerImport");
+            if (Directory.Exists(baseTemp))
+            {
+                foreach (var dir in Directory.GetDirectories(baseTemp))
+                {
+                    try
+                    {
+                        Directory.Delete(dir, true);
+                    }
+                    catch { }
+                }
+            }
+        }
     }
 
     public class ConversationCandidate
     {
         public string DisplayName { get; set; } = "";
+        public List<string> Participant { get; set; } = new();
         public bool IsSelected { get; set; }
+        public string ParticipantString => string.Join(", ", Participant);
 
         public override string ToString() => DisplayName;
+        
     }
 
 }
